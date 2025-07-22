@@ -1,4 +1,7 @@
 Depth,Season,Model,K-fold RMSE,Key Parameters
-ST_10,winter,XGBoost,0.8003765405398111,"lr=0.1, depth=6, n_est=150"
-ST_50,winter,XGBoost,0.363774884061962,"lr=0.1, depth=4, n_est=150"
-ST_100,winter,XGBoost,0.28320215049901554,"lr=0.1, depth=4, n_est=150"
+ST_10,winter,XGBoost,0.7215160048819884,"lr=0.1, depth=4, n_est=150"
+ST_50,winter,XGBoost,0.32893815263394266,"lr=0.1, depth=4, n_est=150"
+ST_100,winter,XGBoost,0.24548135376897068,"lr=0.1, depth=4, n_est=200"
+ST_10,summer,XGBoost,0.8776037989837324,"lr=0.1, depth=4, n_est=150"
+ST_50,summer,XGBoost,0.6505191022086183,"lr=0.1, depth=4, n_est=150"
+ST_100,summer,XGBoost,0.3620771150013077,"lr=0.1, depth=4, n_est=150"
