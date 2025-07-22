@@ -10,5 +10,3 @@ __pycache__/
 
 # CSV or data files *.csv maybe
 data/
-
-# Results or output
