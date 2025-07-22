@@ -1,16 +1,18 @@
-from typing import List, Optional
-from matplotlib.lines import Line2D
-from matplotlib.patches import Patch
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from typing import List, Optional
+from matplotlib.lines import Line2D
+from matplotlib.patches import Patch
+
 
 TITLE_FONTSIZE = 10
 FONTSIZE = 7
 
+
 def rmse_curve(
-    results: dict,
+    results: dict[str, dict[str, List[float]]],
     colors: List[str],
     ax: Optional[plt.Axes] = None,
     x_label: str = "Iterations",
@@ -18,15 +20,19 @@ def rmse_curve(
     legend_title: str = "Validation Strategy"
 ) -> None:
     """
-    Plot RMSE values across different validation strategies.
+    Plot RMSE values across different validation strategies over iterations.
 
     Args:
-        results (dict): Keys are validation names, values dicts with 'rmses' (List[float]).
-        colors (List[str]): Colors for each validation method.
-        ax (plt.Axes, optional): Axis to plot on.
-        x_label (str): Label for x-axis.
-        title (str): Plot title.
-        legend_title (str): Legend title.
+        results (dict): Dictionary where keys are validation strategy names
+            and values are dictionaries with key 'rmses' containing lists of RMSE floats.
+        colors (List[str]): List of colors corresponding to each validation strategy.
+        ax (plt.Axes, optional): Matplotlib axis to plot on. If None, creates a new one.
+        x_label (str): Label for the x-axis (default 'Iterations').
+        title (str): Title of the plot (default 'RMSE by Validation Strategy').
+        legend_title (str): Title for the legend (default 'Validation Strategy').
+
+    Returns:
+        None
     """
     if ax is None:
         _, ax = plt.subplots()
@@ -66,6 +72,7 @@ def rmse_curve(
         loc='upper right'
     )
 
+
 def boxplot_rmse(
     data: np.ndarray,  # shape: (n_methods, n_samples_per_method)
     spacing: int,
@@ -76,7 +83,20 @@ def boxplot_rmse(
     title: str = "RMSE Boxplot"
 ) -> None:
     """
-    Plot boxplot of RMSE values for each validation strategy (each row in data is one method).
+    Plot a boxplot comparing RMSE distributions for multiple validation strategies.
+
+    Args:
+        data (np.ndarray): 2D array where each row corresponds to a validation method,
+            and each column corresponds to an RMSE sample for that method.
+        spacing (int): Spacing between boxes on the x-axis.
+        colors (List[str]): Colors for each validation strategy box.
+        legend_title (str): Title for the legend.
+        labels (List[str]): Labels for each validation strategy.
+        ax (plt.Axes, optional): Matplotlib axis to plot on. If None, creates a new one.
+        title (str): Plot title (default 'RMSE Boxplot').
+
+    Returns:
+        None
     """
     if ax is None:
         _, ax = plt.subplots()
@@ -84,9 +104,11 @@ def boxplot_rmse(
     n_methods = data.shape[0]
     positions = np.arange(n_methods) * spacing
 
-    box = ax.boxplot(data.T,  # transpose so each column = 1 box
-                    patch_artist=True,
-                    positions=positions)
+    box = ax.boxplot(
+        data.T,  # transpose so each column is one boxplot
+        patch_artist=True,
+        positions=positions
+    )
 
     for patch, color in zip(box['boxes'], colors):
         patch.set_facecolor(color)
@@ -108,6 +130,7 @@ def boxplot_rmse(
     )
     ax.grid(True, axis='y')
 
+
 def kdeplot(
     data: pd.DataFrame,
     colors: List[str],
@@ -118,16 +141,19 @@ def kdeplot(
     title: str = "RMSE Distribution"
 ) -> None:
     """
-    Plot KDE distributions grouped by `hue` column with custom colors.
+    Plot Kernel Density Estimate (KDE) distributions grouped by a categorical variable.
 
     Args:
-        data (pd.DataFrame): Melted dataframe with at least columns for hue and x-axis variable.
-        colors (List[str]): Colors corresponding to unique hue values.
-        hue (str): Column name to group/color by.
-        legend_label (str): Legend title.
-        x (str): Column name for x-axis variable.
-        ax (plt.Axes, optional): Axis to plot on.
-        title (str): Plot title.
+        data (pd.DataFrame): DataFrame with at least columns corresponding to `hue` and `x`.
+        colors (List[str]): List of colors corresponding to unique values in `hue`.
+        hue (str): Column name in `data` to group by (categorical variable).
+        legend_label (str): Title for the legend.
+        x (str): Column name in `data` for the x-axis variable.
+        ax (plt.Axes, optional): Matplotlib axis to plot on. If None, creates a new one.
+        title (str): Plot title (default 'RMSE Distribution').
+
+    Returns:
+        None
     """
     if ax is None:
         _, ax = plt.subplots(figsize=(10, 8))

@@ -1,0 +1,15 @@
+# macOS system files
+.DS_Store
+
+# Python cache
+__pycache__/
+*.pyc
+
+# VS Code settings (optional)
+.vscode/
+
+# CSV or data files *.csv maybe
+data/
+
+# Results or output
+results/

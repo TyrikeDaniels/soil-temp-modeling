@@ -1,39 +1,20 @@
 import multiprocessing, csv
-import pandas as pd
 import numpy as np
+import pandas as pd
 import xgboost as xgb
+from typing import Any, Dict
 from sklearn.metrics import root_mean_squared_error
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV, KFold
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import MinMaxScaler
+
 
 DEPTHS = ["ST_10", "ST_50", "ST_100"]
-def main():
-    """
-    Orchestrates the modeling process for multiple seasons.
-    
-    For each defined season (e.g., 'winter', 'summer'):
-    - Loads and preprocesses the dataset specific to that season.
-    - Performs nested cross-validation to find the best model per depth.
-    - Evaluates and stores results in a summary table.
-    
-    The final evaluation table is saved as a CSV file.
-    """
-    k = 10
-    seasons = ["winter", "summer"]
-    seasonal_models = {}
-
-    for season in seasons:
-        df = preprocess_df(season=season)
-        search_results = search(df=df, k=k, season=season)
-        seasonal_models[season] = evaluation_table(search_results, season)
-
-    model_df = pd.concat(seasonal_models.values(), ignore_index=True)
-    write_csv(model_df)
 
 
-def search(df, k, season):
+
+def search(df: pd.DataFrame, k: int, season: str) -> Dict[str, Dict[str, Any]]:
     """
     Conducts nested cross-validation to identify the best-performing model
     for each soil temperature depth (e.g., ST_10, ST_50, ST_100).
@@ -50,7 +31,10 @@ def search(df, k, season):
         season (str): Season label ('winter' or 'summer') for print/log output.
 
     Returns:
-        dict: Mapping of depth → best model name, best score, and best hyperparameters.
+        Dict[str, Dict[str, Any]]: Mapping of depth → dictionary containing:
+            - 'best_model': best model name (str),
+            - 'best_score': best RMSE score (float),
+            - 'best_params': best hyperparameters (dict).
     """
     models = {
         'XGBoost': xgb.XGBRegressor(
@@ -111,7 +95,7 @@ def search(df, k, season):
         best_name = None
 
         outer_cv = KFold(n_splits=k, shuffle=True)
-        inner_cv = KFold(n_splits=k // 2)
+        inner_cv = KFold(n_splits=k)
 
         for name in models:
             rmse_scores = []
@@ -162,13 +146,13 @@ def search(df, k, season):
     return results
 
 
-def evaluation_table(search_results, season):
+def evaluation_table(search_results: Dict[str, Dict[str, Any]], season: str) -> pd.DataFrame:
     """
     Formats the model selection results into a structured DataFrame 
     for summary and export.
 
     Parameters:
-        search_results (dict): Output from `search()` for one season.
+        search_results (Dict[str, Dict[str, Any]]): Output from `search()` for one season.
         season (str): The season the models were trained on.
 
     Returns:
@@ -197,52 +181,16 @@ def evaluation_table(search_results, season):
     return pd.DataFrame(rows)
 
 
-def write_csv(model_df):
+def write_csv(model_df: pd.DataFrame, path: str) -> None:
     """
     Saves the evaluation summary DataFrame to a CSV file.
 
     Parameters:
         model_df (pd.DataFrame): The summary table with best models and metrics.
+        path (str): Path to the output CSV file.
     """
-    with open("eval_table.csv", "w", newline="") as f:
+    with open(path, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=model_df.columns)
         w.writeheader()
         for _, row in model_df.iterrows():
             w.writerow(row.to_dict())
-
-
-def preprocess_df(season, drops=None):
-    """
-    Loads and preprocesses the dataset for a given season.
-
-    - Converts the date column to datetime.
-    - Extracts useful temporal features.
-    - Filters the data based on the specified season.
-    - Optionally drops user-specified columns.
-
-    Parameters:
-        season (str): The season to filter by ('winter' or 'summer').
-        drops (dict, optional): Dictionary mapping season to list of columns to drop.
-
-    Returns:
-        pd.DataFrame: The preprocessed DataFrame for modeling.
-    """
-    df = pd.read_csv("Grand Forks_daily updated.csv")
-    df['Time(CST)'] = pd.to_datetime(df['Time(CST)'], format='%m/%d/%Y')
-    df['Month'] = df['Time(CST)'].dt.month
-    df['Year'] = df['Time(CST)'].dt.year
-    df['Day'] = df['Time(CST)'].dt.dayofyear
-    df.drop(columns=['Time(CST)'], inplace=True)
-
-    if season == 'winter':
-        df = df[(df['Month'] >= 11) | ((1 <= df['Month']) & (df['Month'] <= 3))]
-    elif season == 'summer':
-        df = df[(df['Month'] >= 6) & (df['Month'] <= 9)]
-
-    if drops and len(drops[season]) >= 1:
-        df.drop(columns=drops[season], inplace=True)
-
-    return df
-
-if __name__ == "__main__":
-    main()
