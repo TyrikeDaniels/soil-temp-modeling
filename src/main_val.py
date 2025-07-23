@@ -33,7 +33,7 @@ def main() -> None:
     results: Dict[str, Dict[str, List[float]]] = {name: {"rmses": [], "runtime": []} for name in ["Train/Test", "K-Fold", "Repeated K-Fold"]}
 
     # Validation method configurations
-    k_splits, repeats, iterations = 10, 3, 15
+    k_splits, repeats, iterations = 10, 3, 13
 
     # Depth of focus
     focus_depth = "ST_50"

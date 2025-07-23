@@ -7,8 +7,8 @@ from matplotlib.lines import Line2D
 from matplotlib.patches import Patch
 
 
-TITLE_FONTSIZE = 10
-FONTSIZE = 7
+TITLE_FONTSIZE = 12
+FONTSIZE = 8
 
 
 def rmse_curve(
@@ -69,7 +69,7 @@ def rmse_curve(
         title=legend_title,
         fontsize=FONTSIZE,
         title_fontsize=FONTSIZE,
-        loc='upper right'
+        loc='lower right'
     )
 
 

@@ -106,9 +106,9 @@ def plot_results(results: Dict[str, Dict[str, List[float]]]) -> None:
     val_summary(results).to_csv("../results/eval_val.csv", index=False)
 
     fig, axes = plt.subplots(1, 3, figsize=(13, 6))
-    rmse_curve(results, colors=colors, ax=axes[0], title="RMSE Curve (Fig. 2c)", legend_title="Validation Strategy")
+    rmse_curve(results, colors=colors, ax=axes[0], title="RMSE Curve (Fig. 2a)", legend_title="Validation Strategy")
     boxplot_rmse(box_data, spacing=2, colors=colors, legend_title="Validation Strategy", labels=labels, ax=axes[1], title="RMSE Boxplot (Fig. 2b)")
-    kdeplot(rmse_df, hue="Validation", colors=colors, x='RMSE', ax=axes[2], title="RMSE Distribution (Fig. 2a)", legend_label="Validation Strategy")
+    kdeplot(rmse_df, hue="Validation", colors=colors, x='RMSE', ax=axes[2], title="RMSE Distribution (Fig. 2c)", legend_label="Validation Strategy")
 
     fig.suptitle("Validation Performance Overview", fontsize=16)
     plt.subplots_adjust(left=0.075, bottom=0.2, right=0.949, top=0.7, wspace=0.3, hspace=0.274)
