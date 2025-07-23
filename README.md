@@ -1,24 +1,45 @@
-# Evaluating Validation Strategies for Soil Temperature Prediction with Machine Learning
-Soil Temperature Modeling Using Ensemble Machine Learning
+# Soil Temperature Modeling Using Ensemble Machine Learning
 
 ## Overview
-Soil temperature critically affects plant growth, nutrient uptake, and microbial activity. This project models soil temperature in Grand Forks, ND using environmental data and interpretable machine learning models. We evaluate three validation techniques—Train/Test Split, K-Fold Cross-Validation, and Repeated K-Fold—to assess model reliability and accuracy.
-Unlike prior deep learning work, this study emphasizes lightweight, interpretable models for practical agricultural and environmental applications.
+Soil temperature significantly influences plant development, nutrient cycling, and microbial processes. This project models soil temperature in Grand Forks, ND using environmental data and interpretable ensemble machine learning models. 
+
+We compare three validation strategies—Train/Test Split, K-Fold Cross-Validation, and Repeated K-Fold Cross-Validation—to assess predictive reliability and generalization.
+
+Unlike prior deep learning approaches, this work focuses on lightweight, interpretable models suitable for real-world agricultural and environmental applications.
 
 ## Methods
-- Data: Environmental features and soil temperature measurements at different depths (e.g., 10cm, 50cm, 100cm).
-- Preprocessing: Handling missing values and feature scaling.
-- Validation Techniques:
-  - Train/Test Split: Simple train-test division.
-  - K-Fold CV: Data split into k folds; model trains on k-1 and tests on the remaining fold.
-  - Repeated K-Fold: Multiple repetitions of K-Fold for stability.
-- Models: Ensemble regressors including XGBoost, Gradient Boosting, Random Forest, and AdaBoost.
-- Evaluation: Runtime, RMSE (root mean squared error), and error variance.
+### Data
+- Data was collected from the Grand Forks station of the North Dakota Agricultural Weather Network (NDAWN)
+- Environmental features (e.g., air temperature, precipitation, solar radiation).
+- Soil temperature measurements at multiple depths: 10 cm, 50 cm, and 100 cm.
+
+### Preprocessing
+- Missing value imputation.
+- Feature scaling (standardization).
+
+### Validation Strategies
+- Train/Test Split: Simple partition into training and test sets.
+- K-Fold Cross-Validation: Dataset split into k folds; each fold serves as test data once.
+- Repeated K-Fold: K-Fold repeated multiple times to reduce variance in evaluation.
+
+### Models
+- XGBoost
+- Gradient Boosting
+- Random Forest
+- AdaBoost
+
+### Evaluation Metrics
+- Runtime
+- RMSE (Root Mean Squared Error)
+- Error Variance
 
 ## Key Findings
-Train/Test is fastest but often misses best performance and variance. Repeated K-Fold is slightly better but much slower. K-Fold strikes the best balance.
-XGBoost and Gradient Boosting achieved compact, accurate predictions across depths and seasons.
-Feature importance varies by season and depth, underscoring the need for tailored models.
+- Train/Test Split: Fastest, but prone to variability and often underestimates performance.
+- Repeated K-Fold: Most stable, but computationally expensive.
+- K-Fold CV: Balanced choice with strong performance and reasonable speed.
+
+Among models, XGBoost and Gradient Boosting provided the most accurate, compact predictions across depths and seasonal conditions.
+Feature importance varies by season and depth, highlighting the value of context-aware modeling.
 
 ## Usage
 1. Clone the repository:
@@ -88,9 +109,10 @@ BioRender. (n.d.). BioRender. Retrieved July 21, 2025, from https://www.biorende
 Redregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., ... & Duchesnay, É. (n.d.). sklearn.model_selection.GridSearchCV. scikit-learn. Retrieved July 21, 2025, from https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html
 Hunter, J. D. (2007). Matplotlib: A 2D graphics environment. Computing in Science & Engineering, 9(3), 
 
-## Contact / Questions
+## Contact information for questions and concerns
 
-- Tyrike Daniels  
-- 📧 tyriketheboss@gmail.com  
-- 🌐 [GitHub Profile](https://github.com/tyrikedaniels)
+- Name: Tyrike Daniels  
+- Email: tyriketheboss@gmail.com  
+- GitHub Profile: [github link](https://github.com/tyrikedaniels)
+- LinkedIn Profile: [linkedin link](www.linkedin.com/in/tyrike-daniels-255b84275)
 
