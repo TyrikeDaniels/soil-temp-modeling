@@ -13,7 +13,6 @@ from sklearn.preprocessing import MinMaxScaler
 DEPTHS = ["ST_10", "ST_50", "ST_100"]
 
 
-
 def search(df: pd.DataFrame, k: int, season: str) -> Dict[str, Dict[str, Any]]:
     """
     Conducts nested cross-validation to identify the best-performing model
