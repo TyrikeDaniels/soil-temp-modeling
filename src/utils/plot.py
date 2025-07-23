@@ -8,7 +8,7 @@ from matplotlib.patches import Patch
 
 
 TITLE_FONTSIZE = 12
-FONTSIZE = 8
+FONTSIZE = 9.5
 
 
 def rmse_curve(
